@@ -1,7 +1,84 @@
 import React from 'react';
 import {View, StyleSheet, Text, StatusBar} from 'react-native';
 import Modal from '../components/Modal';
-import {Header, Body} from '../components/HomeComponents';
+import {
+  Header,
+  Body,
+  Content,
+  ContentProps,
+} from '../components/HomeComponents';
+
+const data: ContentProps[] = [
+  {
+    type: 'game',
+    data: [
+      {
+        id: '1',
+        name: 'qq',
+        acount: 'qqsds',
+        password: '12321',
+      },
+    ],
+  },
+  {
+    type: 'platform',
+    data: [
+      {
+        id: '1',
+        name: 'qq',
+        acount: 'qqsds',
+        password: '12321',
+      },
+      {
+        id: '1',
+        name: 'qq',
+        acount: 'qqsds',
+        password: '12321',
+      },
+    ],
+  },
+  {
+    type: 'bank',
+    data: [
+      {
+        id: '1',
+        name: 'qq',
+        acount: 'qqsds',
+        password: '12321',
+      },
+      {
+        id: '1',
+        name: 'qq',
+        acount: 'qqsds',
+        password: '12321',
+      },
+      {
+        id: '1',
+        name: 'qq',
+        acount: 'qqsds',
+        password: '12321',
+      },
+      {
+        id: '1',
+        name: 'qq',
+        acount: 'qqsds',
+        password: '12321',
+      },
+      {
+        id: '1',
+        name: 'qq',
+        acount: 'qqsds',
+        password: '12321',
+      },
+      {
+        id: '1',
+        name: 'qq',
+        acount: 'qqsds',
+        password: '12321',
+      },
+    ],
+  },
+];
 
 function App(): JSX.Element {
   return (
@@ -13,7 +90,9 @@ function App(): JSX.Element {
       />
       <Header />
       <Body>
-        <Header />
+        {data.map((item, index) => (
+          <Content type={item.type} data={item.data} key={index} />
+        ))}
       </Body>
       <Modal />
     </View>
