@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,9 +7,11 @@ import {
   Image,
   TextInput,
 } from 'react-native';
+import {ModalContext} from '../contexts/ModalContext';
 import icon_close from '../assets/icon_close_modal.png';
 
 export const Header = (): JSX.Element => {
+  const {closeModal} = useContext(ModalContext);
   const styles = StyleSheet.create({
     root: {
       height: 30,
@@ -29,20 +31,20 @@ export const Header = (): JSX.Element => {
   return (
     <View style={styles.root}>
       <Text>添加账号</Text>
-      <TouchableOpacity
-        onPress={() => {
-          console.log('pressed');
-        }}
-        style={styles.icon_close_wrapper}>
+      <TouchableOpacity onPress={closeModal} style={styles.icon_close_wrapper}>
         <Image source={icon_close} style={styles.icon_close} />
       </TouchableOpacity>
     </View>
   );
 };
 
-export const Selection = (): JSX.Element => {
-  type SelectionType = 'game' | 'platform' | 'bank' | 'other';
-  const [type, setType] = useState<SelectionType>('game');
+export type SelectionType = 'game' | 'platform' | 'bank' | 'other';
+export type SelectionProps = {
+  type: SelectionType;
+  onSelect: (type: SelectionType) => void;
+};
+export const Selection: React.FC<SelectionProps> = (props): JSX.Element => {
+  const {type, onSelect} = props;
   const styles = StyleSheet.create({
     root: {
       justifyContent: 'center',
@@ -86,9 +88,7 @@ export const Selection = (): JSX.Element => {
     {index: 2, text: 'bank'},
     {index: 3, text: 'other'},
   ];
-  const onSelect = (text: SelectionType) => {
-    setType(text);
-  };
+
   const renderOption = () => {
     return arr.map((obj, index) => {
       return (
@@ -115,11 +115,13 @@ export const Selection = (): JSX.Element => {
   );
 };
 
+type InputTitleType = 'name' | 'acount' | 'password';
 type InputProps = {
-  title: 'name' | 'acount' | 'password';
+  title: InputTitleType;
+  onChangeText: (title: InputTitleType, text: string) => void;
 };
 export const Input = (props: InputProps): JSX.Element => {
-  const {title} = props;
+  const {title, onChangeText} = props;
   const styles = StyleSheet.create({
     root: {
       justifyContent: 'center',
@@ -141,12 +143,21 @@ export const Input = (props: InputProps): JSX.Element => {
   return (
     <View style={styles.root}>
       <Text style={styles.title}>{title}</Text>
-      <TextInput style={styles.input} />
+      <TextInput
+        style={styles.input}
+        onChangeText={text => {
+          onChangeText(title, text);
+        }}
+      />
     </View>
   );
 };
 
-export const Button = (props): JSX.Element => {
+type ButtonProps = {
+  onSubmit: () => void;
+};
+export const Button: React.FC<ButtonProps> = (props): JSX.Element => {
+  const {onSubmit} = props;
   const styles = StyleSheet.create({
     root: {
       height: 40,
@@ -166,7 +177,7 @@ export const Button = (props): JSX.Element => {
     },
   });
   return (
-    <TouchableOpacity style={styles.root}>
+    <TouchableOpacity style={styles.root} onPress={onSubmit}>
       <Text style={styles.title}>保存</Text>
     </TouchableOpacity>
   );
