@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import icon_game from '../assets/icon_game.png';
 import icon_arrow from '../assets/icon_arrow.png';
+import {ModalContext} from '../contexts/ModalContext';
 
 export const Header = (): JSX.Element => {
   const styles = StyleSheet.create({
@@ -64,6 +65,7 @@ export type DataType = {
 };
 
 export const Content = (props: ContentProps): JSX.Element => {
+  const {showModal} = useContext(ModalContext);
   const {type, data} = props;
   const [fold, setFold] = useState<boolean>(false);
   const toggleFold = () => {
@@ -124,7 +126,12 @@ export const Content = (props: ContentProps): JSX.Element => {
       </View>
       {!fold &&
         data.map((item, index) => (
-          <View key={index} style={styles.content}>
+          <TouchableOpacity
+            key={index}
+            style={styles.content}
+            onLongPress={() => {
+              showModal(item);
+            }}>
             <Text style={{fontSize: 16, fontWeight: 600}}>{item.name}</Text>
             <View style={{flexDirection: 'row'}}>
               <Text style={{flex: 1, textAlign: 'left'}}>
@@ -134,7 +141,7 @@ export const Content = (props: ContentProps): JSX.Element => {
                 密码：{item.password}
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
     </View>
   );

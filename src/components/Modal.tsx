@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, Modal, View} from 'react-native';
+import React, {useState, useContext} from 'react';
+import {StyleSheet, Modal, View} from 'react-native';
 import {
   Header,
   Selection,
@@ -8,11 +8,15 @@ import {
   SelectionType,
   InputTitleType,
 } from './FormComponents';
+import {ModalContext} from '../contexts/ModalContext';
+import {save, load} from '../utils/Storage';
 
 type ModalProps = {
   visible: boolean;
 };
 const App: React.FC<ModalProps> = (props): JSX.Element => {
+  const {visible} = props;
+  const {closeModal} = useContext(ModalContext);
   const [type, setType] = useState<SelectionType>('game');
   const [name, setName] = useState<string>('');
   const [acount, setAcount] = useState<string>('');
@@ -22,8 +26,12 @@ const App: React.FC<ModalProps> = (props): JSX.Element => {
   };
   const onSubmit = () => {
     console.log({type, name, acount, password});
+    closeModal();
   };
-  const titleMapState = {
+  type TitleMapStateType = {
+    [P in InputTitleType]: React.Dispatch<React.SetStateAction<any>>;
+  };
+  const titleMapState: TitleMapStateType = {
     name: setName,
     acount: setAcount,
     password: setPassword,
@@ -31,7 +39,6 @@ const App: React.FC<ModalProps> = (props): JSX.Element => {
   const onChangeText = (title: InputTitleType, text: string) => {
     titleMapState[title](text);
   };
-  const {visible} = props;
   return (
     <Modal
       visible={visible}

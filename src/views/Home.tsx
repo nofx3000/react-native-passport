@@ -13,6 +13,7 @@ import {
   Body,
   Content,
   ContentProps,
+  DataType,
 } from '../components/HomeComponents';
 import {ModalContext} from '../contexts/ModalContext';
 import icon_add from '../assets/icon_add.png';
@@ -144,32 +145,33 @@ const data: ContentProps[] = [
 
 function App(): JSX.Element {
   const [modalIsVisible, setModalIsVisible] = useState<boolean>(false);
-  const showModal = () => {
+  const showModal = (data?: DataType) => {
     setModalIsVisible(true);
+    if (data) {
+      console.log(data);
+    }
   };
   const closeModal = () => {
     setModalIsVisible(false);
   };
-  const submitModal = data => {
-    console.log(data);
-  };
+
   return (
     <View style={styles.root}>
-      <StatusBar
-        translucent={true}
-        barStyle="dark-content"
-        backgroundColor="#30303060"
-      />
-      <Header />
-      <Body>
-        {data.map((item, index) => (
-          <Content type={item.type} data={item.data} key={index} />
-        ))}
-      </Body>
-      <TouchableOpacity onPress={showModal}>
-        <Image source={icon_add} style={styles.add} />
-      </TouchableOpacity>
-      <ModalContext.Provider value={{closeModal, submitModal}}>
+      <ModalContext.Provider value={{closeModal, showModal}}>
+        <StatusBar
+          translucent={true}
+          barStyle="dark-content"
+          backgroundColor="#30303060"
+        />
+        <Header />
+        <Body>
+          {data.map((item, index) => (
+            <Content type={item.type} data={item.data} key={index} />
+          ))}
+        </Body>
+        <TouchableOpacity onPress={showModal}>
+          <Image source={icon_add} style={styles.add} />
+        </TouchableOpacity>
         <Modal visible={modalIsVisible} />
       </ModalContext.Provider>
     </View>

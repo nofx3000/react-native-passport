@@ -115,7 +115,7 @@ export const Selection: React.FC<SelectionProps> = (props): JSX.Element => {
   );
 };
 
-type InputTitleType = 'name' | 'acount' | 'password';
+export type InputTitleType = 'name' | 'acount' | 'password';
 type InputProps = {
   title: InputTitleType;
   onChangeText: (title: InputTitleType, text: string) => void;
