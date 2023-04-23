@@ -117,6 +117,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('/Users/dh/Documents/Demos/react_native_passport/android/passport.keystore')
+            storePassword '111111'
+            keyAlias 'passport'
+            keyPassword '111111'
+        }
     }
     buildTypes {
         debug {
