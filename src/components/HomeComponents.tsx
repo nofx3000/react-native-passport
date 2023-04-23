@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,10 +8,11 @@ import {
   ScrollView,
   Image,
   LayoutAnimation,
+  Alert,
 } from 'react-native';
+import {load, save} from '../utils/Storage';
 import icon_game from '../assets/icon_game.png';
 import icon_arrow from '../assets/icon_arrow.png';
-import {ModalContext} from '../contexts/ModalContext';
 
 export const Header = (): JSX.Element => {
   const styles = StyleSheet.create({
@@ -52,25 +53,21 @@ export const Body = ({children}): JSX.Element => {
   return <ScrollView style={styles.root}>{children}</ScrollView>;
 };
 
-export type ContentProps = {
-  type: 'game' | 'platform' | 'bank' | 'other';
-  data: DataType[];
-};
-
-export type DataType = {
-  id: string;
-  name: string;
-  acount: string;
-  password: string;
-};
-
 export const Content = (props: ContentProps): JSX.Element => {
-  const {showModal} = useContext(ModalContext);
-  const {type, data} = props;
+  const {type, data, modalRef, loadData} = props;
   const [fold, setFold] = useState<boolean>(false);
   const toggleFold = () => {
-    LayoutAnimation.linear();
+    LayoutAnimation.easeInEaseOut();
     setFold(!fold);
+  };
+  const deleteAccount = (account: DataType) => {
+    load('accountList').then(data => {
+      let accountList = JSON.parse(data);
+      accountList = accountList.filter(item => item.id !== account.id);
+      save('accountList', JSON.stringify(accountList)).then(() => {
+        loadData();
+      });
+    });
   };
   const styles = StyleSheet.create({
     root: {
@@ -129,13 +126,20 @@ export const Content = (props: ContentProps): JSX.Element => {
           <TouchableOpacity
             key={index}
             style={styles.content}
+            onPress={() => {
+              modalRef?.current?.showModal(type, item);
+            }}
             onLongPress={() => {
-              showModal(item);
+              const buttons = [
+                {text: '取消', onPress: () => {}},
+                {text: '确定', onPress: () => deleteAccount(item)},
+              ];
+              Alert.alert('提示', `确定删除「${item.name}」账号吗？`, buttons);
             }}>
             <Text style={{fontSize: 16, fontWeight: 600}}>{item.name}</Text>
             <View style={{flexDirection: 'row'}}>
               <Text style={{flex: 1, textAlign: 'left'}}>
-                账号：{item.acount}
+                账号：{item.account}
               </Text>
               <Text style={{flex: 1, textAlign: 'left'}}>
                 密码：{item.password}

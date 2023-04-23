@@ -1,179 +1,202 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   StyleSheet,
-  Text,
   StatusBar,
   TouchableOpacity,
   Image,
+  LayoutAnimation,
 } from 'react-native';
 import Modal from '../components/Modal';
-import {
-  Header,
-  Body,
-  Content,
-  ContentProps,
-  DataType,
-} from '../components/HomeComponents';
-import {ModalContext} from '../contexts/ModalContext';
+import {Header, Body, Content} from '../components/HomeComponents';
+import {save, load} from '../utils/Storage';
 import icon_add from '../assets/icon_add.png';
 
-const data: ContentProps[] = [
-  {
-    type: 'game',
-    data: [
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-    ],
-  },
-  {
-    type: 'platform',
-    data: [
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-    ],
-  },
-  {
-    type: 'bank',
-    data: [
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-    ],
-  },
-  {
-    type: 'other',
-    data: [
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-      {
-        id: '1',
-        name: 'qq',
-        acount: 'qqsds',
-        password: '12321',
-      },
-    ],
-  },
-];
+// const data: ContentProps[] = [
+//   {
+//     type: 'game',
+//     data: [
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//     ],
+//   },
+//   {
+//     type: 'platform',
+//     data: [
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//     ],
+//   },
+//   {
+//     type: 'bank',
+//     data: [
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//     ],
+//   },
+//   {
+//     type: 'other',
+//     data: [
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//       {
+//         id: '1',
+//         name: 'qq',
+//         account: 'qqsds',
+//         password: '12321',
+//       },
+//     ],
+//   },
+// ];
 
 function App(): JSX.Element {
-  const [modalIsVisible, setModalIsVisible] = useState<boolean>(false);
-  const showModal = (data?: DataType) => {
-    setModalIsVisible(true);
-    if (data) {
-      console.log(data);
-    }
+  const modalRef = useRef<ModalRefAttr | null>(null);
+  const [sectionData, setSectionData] = useState<ContentProps[]>([]);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+  const showModal = () => {
+    modalRef.current?.showModal();
   };
-  const closeModal = () => {
-    setModalIsVisible(false);
+  const loadData = () => {
+    console.log('loaded');
+
+    load('accountList').then(data => {
+      const accountList = JSON.parse(data);
+
+      const gameList: DataType[] =
+        accountList.filter((item: DataType) => item.type === 'game') || [];
+      const platformList: DataType[] =
+        accountList.filter((item: DataType) => item.type === 'platform') || [];
+      const bankList: DataType[] =
+        accountList.filter((item: DataType) => item.type === 'bank') || [];
+      const otherList: DataType[] =
+        accountList.filter((item: DataType) => item.type === 'other') || [];
+
+      const _sectionData: ContentProps[] = [
+        {type: 'game', data: gameList},
+        {type: 'platform', data: platformList},
+        {type: 'bank', data: bankList},
+        {type: 'other', data: otherList},
+      ];
+
+      LayoutAnimation.easeInEaseOut();
+      setSectionData(_sectionData);
+    });
   };
 
   return (
     <View style={styles.root}>
-      <ModalContext.Provider value={{closeModal, showModal}}>
-        <StatusBar
-          translucent={true}
-          barStyle="dark-content"
-          backgroundColor="#30303060"
-        />
-        <Header />
-        <Body>
-          {data.map((item, index) => (
-            <Content type={item.type} data={item.data} key={index} />
-          ))}
-        </Body>
-        <TouchableOpacity onPress={showModal}>
-          <Image source={icon_add} style={styles.add} />
-        </TouchableOpacity>
-        <Modal visible={modalIsVisible} />
-      </ModalContext.Provider>
+      <StatusBar
+        translucent={true}
+        barStyle="dark-content"
+        backgroundColor="#30303060"
+      />
+      <Header />
+      <Body>
+        {sectionData.map((item, index) => (
+          <Content
+            type={item.type}
+            data={item.data}
+            key={index}
+            modalRef={modalRef}
+            loadData={loadData}
+          />
+        ))}
+      </Body>
+      <TouchableOpacity onPress={showModal}>
+        <Image source={icon_add} style={styles.add} />
+      </TouchableOpacity>
+      <Modal ref={modalRef} loadData={loadData} />
     </View>
   );
 }

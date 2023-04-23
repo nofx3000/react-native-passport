@@ -10,8 +10,8 @@ import {
 import {ModalContext} from '../contexts/ModalContext';
 import icon_close from '../assets/icon_close_modal.png';
 
-export const Header = (): JSX.Element => {
-  const {closeModal} = useContext(ModalContext);
+export const Header: React.FC<HeaderProps> = (props): JSX.Element => {
+  const {onClose} = props;
   const styles = StyleSheet.create({
     root: {
       height: 30,
@@ -31,18 +31,13 @@ export const Header = (): JSX.Element => {
   return (
     <View style={styles.root}>
       <Text>添加账号</Text>
-      <TouchableOpacity onPress={closeModal} style={styles.icon_close_wrapper}>
+      <TouchableOpacity onPress={onClose} style={styles.icon_close_wrapper}>
         <Image source={icon_close} style={styles.icon_close} />
       </TouchableOpacity>
     </View>
   );
 };
 
-export type SelectionType = 'game' | 'platform' | 'bank' | 'other';
-export type SelectionProps = {
-  type: SelectionType;
-  onSelect: (type: SelectionType) => void;
-};
 export const Selection: React.FC<SelectionProps> = (props): JSX.Element => {
   const {type, onSelect} = props;
   const styles = StyleSheet.create({
@@ -115,13 +110,8 @@ export const Selection: React.FC<SelectionProps> = (props): JSX.Element => {
   );
 };
 
-export type InputTitleType = 'name' | 'acount' | 'password';
-type InputProps = {
-  title: InputTitleType;
-  onChangeText: (title: InputTitleType, text: string) => void;
-};
 export const Input = (props: InputProps): JSX.Element => {
-  const {title, onChangeText} = props;
+  const {title, onChangeText, value} = props;
   const styles = StyleSheet.create({
     root: {
       justifyContent: 'center',
@@ -145,6 +135,7 @@ export const Input = (props: InputProps): JSX.Element => {
       <Text style={styles.title}>{title}</Text>
       <TextInput
         style={styles.input}
+        value={value}
         onChangeText={text => {
           onChangeText(title, text);
         }}
@@ -153,9 +144,6 @@ export const Input = (props: InputProps): JSX.Element => {
   );
 };
 
-type ButtonProps = {
-  onSubmit: () => void;
-};
 export const Button: React.FC<ButtonProps> = (props): JSX.Element => {
   const {onSubmit} = props;
   const styles = StyleSheet.create({
